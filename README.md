@@ -1,6 +1,6 @@
 gros-client / [Exports](sdks/sdk_js/modules.md)
 
-# Fourier Universal Robot System - Client SDK (Javascript/Typescript)
+# RoCS - Client SDK (Javascript/Typescript)
 ![](sdks/sdk_js/pics/banner.jpeg)
 
 * [Source Code](https://github.com/FFTAI/gros_client_js.git)
