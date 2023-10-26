@@ -1,7 +1,7 @@
 {
-  "name": "gros-client",
-  "version": "0.2.28",
-  "description": "this client for npm",
+  "name": "rocs-client",
+  "version": "1.1.0",
+  "description": "RoCS-Client SDK (Javascript/Typescript) For Fourier",
   "main": "index.js",
   "scripts": {
     "build": "tsc",
