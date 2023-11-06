@@ -34,6 +34,13 @@ export enum HandAction {
     HANDSHAKE = "HANDSHAKE"
 }
 
+export enum BodyAction {
+    //下蹲
+    SQUAT = "SQUAT",
+    //扭腰
+    ROTATE_WAIST = "ROTATE_WAIST"
+}
+
 /**
  * GR-1人形机器人对象
  *
@@ -147,10 +154,25 @@ export class Human extends RobotBase {
     }
 
     /**
+     * 控制GR-01人形设备下肢运动 (该请求维持了长链接的方式进行发送)
+     *
+     * @param {number} squat 下蹲 控制上下，取值范围-0.15~0。向下为负，0回正。
+     * @param {number} rotate_waist 扭腰 控制左右，取值范围为正负14.32。向左为正，向右为负！(浮点数8位)
+     */
+    public body(squat: number, rotate_waist: number): void {
+        squat = super.cover_param(squat, 'squat', -0.15, 0)
+        rotate_waist = super.cover_param(rotate_waist, 'rotate_waist', -14.32, 14.32)
+        super.websocket_send({
+            "command": "lower_body",
+            "data": {"squat": squat, "rotate_waist": rotate_waist}
+        })
+    }
+
+    /**
      * 控制GR-01人形设备上肢
      * 
-     * @param {number} arm_action 胳膊  归零:RESET 左挥手:LEFT_ARM_WAVE 双臂挥手:TWO_ARMS_WAVE 甩胳膊:ARMS_SWING 打招呼:HELLO
-     * @param {number} hand_action 手  半握手:HALF_HANDSHAKE 竖大拇指:THUMBS_UP 手张开:OPEN 手微屈:SLIGHTLY_BENT 抓握:GRASP 抖动手:TREMBLE 握手:HANDSHAKE
+     * @param {string} arm_action 胳膊  归零:RESET 左挥手:LEFT_ARM_WAVE 双臂挥手:TWO_ARMS_WAVE 甩胳膊:ARMS_SWING 打招呼:HELLO
+     * @param {string} hand_action 手  半握手:HALF_HANDSHAKE 竖大拇指:THUMBS_UP 手张开:OPEN 手微屈:SLIGHTLY_BENT 抓握:GRASP 抖动手:TREMBLE 握手:HANDSHAKE
      */
     public async upper_body(arm_action?: ArmAction,hand_action?: HandAction): Promise<any> {
         return super.http_request({
@@ -159,6 +181,21 @@ export class Human extends RobotBase {
             data: {
                 arm_action: arm_action,
                 hand_action: hand_action
+            }
+        })
+    }
+
+    /**
+     * 控制GR-01人形设备下肢
+     * 
+     * @param {string} lower_body_mode 动作模式：SQUAT-下蹲、ROTATE_WAIST-扭腰
+     */
+    public async lower_body(lower_body_mode?: BodyAction): Promise<any> {
+        return super.http_request({
+            method: "POST",
+            url: "/robot/lower_body",
+            data: {
+                lower_body_mode: lower_body_mode
             }
         })
     }
@@ -209,5 +246,49 @@ export class Human extends RobotBase {
             console.log('target_list',target_list)
             super.websocket_send({'command': 'move_joint', 'data': {"command": target_list}})
         } 
+    }
+
+    /**
+     * 启动控制程序
+     *
+     */
+    public async control_svr_start(): Promise<any> {
+        return super.http_request({
+            method: "GET",
+            url: "/robot/sdk_ctrl/start",
+        })
+    }
+
+    /**
+     * 关闭控制程序
+     *
+     * @return {Promise}  return
+     */
+    public async control_svr_close(): Promise<any> {
+        return super.http_request({
+            method: "GET",
+            url: "/robot/sdk_ctrl/close",
+        })
+    }
+    /**
+     * 查看控制程序状态
+     *
+     * @return {Promise}  return
+     */
+    public async control_svr_status(): Promise<any> {
+        return super.http_request({
+            method: "GET",
+            url: "/robot/sdk_ctrl/status",
+        })
+    }
+    /**
+     * 查看控制程序日志
+     *
+     */
+    public async control_svr_log_view(): Promise<any> {
+        return super.http_request({
+            method: "GET",
+            url: "/robot/sdk_ctrl/log",
+        })
     }
 }
