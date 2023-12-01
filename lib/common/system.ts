@@ -1,18 +1,20 @@
 /**
- * 系统控制
+ *  This class facilitates various system operations, including shutdown, reboot, and other commands related to system control.
  *
- * 用于关机、重启、重置等其他系统指令操作
+ * 
  */
 export class System {
 
     /**
-     *
+     * This method triggers the process of restarting the system, allowing for a controlled and orderly reboot.
      */
     public reboot(): void {
-        // 实现重启系统的逻辑
+        // The implementation logic for system reboot will be added here.
     }
-
+    /**
+     * This method triggers the process of shutting down the system in a controlled manner, preparing it for a complete power-off state.
+     */
     public shutdown(): void {
-        // 实现关机系统的逻辑
+        //The implementation logic for system shutdown will be added here.
     }
 }
