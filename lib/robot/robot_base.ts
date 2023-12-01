@@ -1,39 +1,44 @@
-﻿import EventEmitter from "events";
-import axios, {AxiosRequestConfig} from "axios";
-import {Camera} from "../common/camera";
-import {System} from "../common/system";
+﻿/**
+ * Importing necessary modules and classes for the RobotBase.
+ * EventEmitter for handling events;axios for making HTTP requests;Camera class for capturing video stream;System class for system-level control commands
+ */
+// 
+import EventEmitter from "events";// Importing EventEmitter for handling events
+import axios, { AxiosRequestConfig } from "axios";
+import { Camera } from "../common/camera";
+import { System } from "../common/system";
 
 /**
- * 实例化robot对象连接参数（可选）
+ * Instantiation parameters for the robot object (optional)
  */
 export interface ConnectOption {
     /**
-     * 是否开启ssl认证。默认 False
+     * Whether to enable SSL authentication. Default is False.
      */
     ssl?: boolean;
     /**
-     * robot所运行的网络IP
+     * IP of the robot.
      */
     host?: string,
     /**
-     * robot所运行的网络PORT
+     * The network PORT of the robot.
      */
     port?: number
 }
 
 /**
- * Robot 基类
+ * Base class for robot functionalities and connection setup.
  *
- * 实例化的时候会通过websocket连接到对应设备的控制端口！
+ * Connect to the port of the robot via WebSocket during instantiation.
  */
 export class RobotBase extends EventEmitter {
 
     /**
-     *  相机
+     *  Used to capture video stream and get video stream status.
      */
     public readonly camera: Camera | undefined;
     /**
-     * 系统控制
+     * System level control commands, such as startup, reboot and reset.
      */
     public readonly system: System = new System()
     private readonly baseUrl: string = '';
@@ -42,14 +47,14 @@ export class RobotBase extends EventEmitter {
     private retry_count: number = 0
 
     /**
-     * Robot 基类构造函数
-     *
-     * @param {ConnectOption} option 连接参数（可选）
+     * Constructor for the base class of the robot.
+     * Initializes the robot, establishes a connection, and sets up necessary parameters.
+     * @param {ConnectOption} option - Optional parameters for establishing the connection.
      */
     constructor(option?: ConnectOption) {
         super()
-        console.log('Robot 初始化...')
-        const {ssl = false, host = '127.0.0.1', port = '8001'} = option ?? {};
+        console.log('The robot is initializing...')
+        const { ssl = false, host = '127.0.0.1', port = '8001' } = option ?? {};
 
         if (ssl) {
             this.wsUrl = `wss://${host}:${port}/ws`
@@ -66,13 +71,13 @@ export class RobotBase extends EventEmitter {
                 // applicable to the browser
                 this.ws = new WebSocket(this.wsUrl);
             } else {
-                // applicable to the nodejs
+                // applicable to Node.js
                 const WebSocket = require('ws')
                 this.ws = new WebSocket(this.wsUrl);
             }
 
             this.ws.onopen = () => {
-                console.log('Robot 初始化成功!')
+                console.log('Robot initialization successful.')
                 this.emit('open')
             }
 
@@ -88,14 +93,18 @@ export class RobotBase extends EventEmitter {
                 this.emit('error', event);
             }
         } catch (e) {
-            console.log('Robot 初始化失败！', e)
+            console.log('Robot initialization failed.', e)
         }
     }
 
     /**
-     * 启动 : 重置/归零/对设备初始状态的校准
+     * Initiates the process to reset, zero, or calibrate the robot, bringing it to its initial state.
+     * This command is crucial when you intend to take control of the robot, ensuring it starts from a known and calibrated position.
+     * @returns {Promise<any>} - A promise that resolves with the result of the start command.
      *
-     * 当你想要控制Robot设备的时候，你的第一个指令
+     * @remarks
+     * Ensure that the robot has sufficient clearance and is ready for the calibration process before issuing this command.
+     *      
      */
     public async start(): Promise<any> {
         return this.http_request({
@@ -105,9 +114,10 @@ export class RobotBase extends EventEmitter {
     }
 
     /**
-     * 停止
-     *
-     * 该命令优先于其他命令! 会掉电停止。请在紧急情况下触发
+     * Initiates the process to safely power down the robot. This command takes precedence over other commands, ensuring an orderly shutdown. It is recommended to trigger this command in emergency situations or when an immediate stop is necessary.
+     * @returns {Promise<any>} - A promise that resolves with the result of the stop command.
+     * @remarks
+     * Use this command with caution, as it results in a powered-down state of the robot. Ensure that there are no critical tasks or movements in progress before invoking this command to prevent unexpected behavior.
      */
     public async stop(): Promise<any> {
         return this.http_request({
@@ -118,48 +128,51 @@ export class RobotBase extends EventEmitter {
 
 
     /**
-     * event : 该监听将会在Robot设备连接成功时触发
-     *
-     * @param listener 无参回调, 你可以在确认后执行你的业务逻辑
+     * Triggered when the robot is successfully connected.
+     * This event allows you to set up a listener for the successful connection to the robot. It is recommended to execute your business logic or perform additional actions after confirming the connection.
+     * @param listener - A callback function without parameters that you can execute once the connection is confirmed.
+     * @remarks
+     * It's essential to handle the 'onConnected' event to ensure that your application responds appropriately to the successful connection of the robot.
      */
     public on_connected(listener: () => void) {
         this.on('open', listener);
     }
 
     /**
-     * event: 该监听将会在Robot设备连接关闭时触发
+     * Triggered when the robot device connection is closed. You can use this event to perform resource cleanup or similar operations after the connection is closed.
      *
-     * @param listener 无参回调，你可以再次进行资源回收等类似的操作
+     * @param listener A callback function without parameters that you can execute once the connection is closed.
+     * @remarks
+     * It's crucial to handle the 'onClosed' event to manage resources or take specific actions when the robot connection is closed.
      */
     public on_close(listener: () => void) {
         this.on('close', listener);
     }
 
     /**
-     * event: 该监听将会在Robot设备发送错误时触发
+     * Triggered when an error occurs in the robot. Managing errors effectively can ensure the stability of your application.
      *
-     * @param listener 会将错误信息回调
+     * @param listener A callback function that takes an error parameter and can be used to handle the error information.
      */
     public on_error(listener: (err: Error) => void) {
         this.on('error', err => listener(err));
     }
 
     /**
-     * 该监听将会在Robot设备主动广播消息时触发
+     * Triggered when the robot actively broadcasts a message.
      *
-     * @param listener ，你可能需要监听该回调处理你的逻辑
+     * @param listener You may need to listen to this event to handle specific logic related to the broadcasted message.
      */
     public on_message(listener: (data: any) => void) {
         this.on('message', (message) => listener(message));
     }
 
     /**
-     * 发送socket消息到Robot设备
+     * This function is used to send a WebSocket message to the robot device. 
      *
-     * 这是一个内部函数: 将消息转换为字符串并发送
-     * 内部做了重试机制！ 主要是为了防止客户端在socket连接不完全的时候立即发送消息
-     *
-     * @param message 具体的消息体
+     * This is an internal function that converts the message to a string and sends it to the robot. It includes a retry mechanism to prevent immediate message sending when the socket connection is not fully established.
+     *      *
+     * @param message The specific message body to be sent.
      * @protected
      */
     protected websocket_send(message: any) {
@@ -169,11 +182,11 @@ export class RobotBase extends EventEmitter {
             return
         }
         if (this.retry_count == 5) {
-            throw new Error("WebSocket SendMsg Error...")
+            throw new Error("Failed to send WebSocket message: Maximum retry limit reached.")
         }
         this.retry_count += 1
 
-        console.warn("WebSocket state not ready...: retry: %s", this.retry_count)
+        console.warn("WebSocket not ready: Retrying (attempt %s)", this.retry_count)
         setTimeout(() => {
             this.websocket_send(message)
         }, 1000)
@@ -181,11 +194,11 @@ export class RobotBase extends EventEmitter {
 
     /**
      *
-     * 发送http消息
+     * This is an internal function that sends an HTTP request to the robot device based on the provided Axios request configuration. It returns a Promise with the specified response type.
      *
-     * 这是一个内部函数
+     * 
      *
-     * @param {AxiosRequestConfig} config http请求的具体内容
+     * @param {AxiosRequestConfig} config The specific configuration for the HTTP request.
      * @protected
      */
     protected async http_request<T>(config: AxiosRequestConfig): Promise<T> {
@@ -197,32 +210,29 @@ export class RobotBase extends EventEmitter {
     }
 
     /**
-     * 参数转换，对参数做限定
+     * This internal function is designed to handle a numerical parameter along with its value, minimum, and maximum thresholds. It guarantees that the parameter stays within the defined range, and if it falls outside those bounds, it adjusts it to the nearest threshold.
      *
-     * 通过参数大小阈值的限定， 使参数合法，如果超出最大阈值将转化为最大阈值返回
-     *
-     * @param {number} param 参数名
-     * @param {string} value 参数值
-     * @param {number} minThreshold 参数值最大阈值
-     * @param {number} maxThreshold 参数值最小阈值
+     * 
+     * @param {number} value - The parameter value.
+     * @param {string} name - The parameter name.
+     * @param {number} minThreshold - The minimum threshold for the parameter value.
+     * @param {number} maxThreshold - The maximum threshold for the parameter value.
      * @protected
      */
-    protected cover_param(param: number, value: string, minThreshold: number, maxThreshold: number): number {
-        if (param == undefined) {
-            console.warn(`Illegal parameter: ${value} = ${param} `)
-            param = 0
+    protected cover_param(value: number, name: string, minThreshold: number, maxThreshold: number): number {
+        if (value == undefined) {
+            console.warn(`Invalid parameter: ${name} is ${value}. The value 0 will be used `)
+            value = 0
         }
-        if (param > maxThreshold) {
-            console.warn(`Illegal parameter: ${value} = ${param} `,
-                `greater than maximum, expected not be greater than ${maxThreshold}, actual ${param}`)
-            param = maxThreshold
+        if (value > maxThreshold) {
+            console.warn(`Invalid parameter: ${name} (${value}) exceeds maximum allowed value (${maxThreshold}). The maximum value (${maxThreshold}) will be used.`)
+            value = maxThreshold
         }
-        if (param < minThreshold) {
-            console.warn(`Illegal parameter: ${value} = ${param} `,
-                `greater than maximum, expected not be less than ${minThreshold}, actual ${param}`)
-            param = minThreshold
+        if (value < minThreshold) {
+            console.warn(`Invalid parameter:  ${name} (${value}) is less than the minimum allowed value ${minThreshold}. The minimum value (${minThreshold}) will be used.`)
+            value = minThreshold
         }
-        return param
+        return value
     }
 
 
