@@ -100,9 +100,8 @@ export class Human extends RobotBase {
     }
 
     /**
-     * Enable state debugging mode.
-     * Triggering this function will instruct the robot to actively send status values in the background.
-     * You need to listen to the on_message function for handling the received data.
+     * This function is used to enable the debug state mode, allowing the robot to actively send periodic state updates. This is beneficial for real-time monitoring.
+     * To handle and process the received data, be sure to listen to the 'on_message' function.
      *
      * @param {number} frequence Frequency (integer)
      * @return {Promise}  Return a promise
@@ -118,7 +117,7 @@ export class Human extends RobotBase {
     }
 
     /**
-     *  Disable state debugging mode.
+     * This function disables the debug state mode, stopping the periodic state updates from the robot. 
      * @return {Promise}  Return a promise
      */
     public async disable_debug_state(): Promise<any> {
