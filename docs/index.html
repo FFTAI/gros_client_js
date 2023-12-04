@@ -12,36 +12,39 @@
 <div class="col-content">
 <div class="tsd-page-title">
 <h2>rocs-client</h2></div>
-<div class="tsd-panel tsd-typography"><a id="md:rocs-client-sdk-javascripttypescript" class="tsd-anchor"></a><h1><a href="#md:rocs-client-sdk-javascripttypescript">RoCS-Client SDK (Javascript/Typescript)</a></h1><a id="md:overview" class="tsd-anchor"></a><h2><a href="#md:overview">Overview</a></h2><p>This example (RoCS Client SDK) is suitable for you already have a robot device provided by Fourier!
-This example can be used to control the robot.
-It provides a set of simple APIs that allow you to easily interact with the robot.</p>
-<a id="md:quick-start" class="tsd-anchor"></a><h2><a href="#md:quick-start">Quick Start</a></h2><a id="md:installation" class="tsd-anchor"></a><h3><a href="#md:installation">Installation</a></h3><pre><code class="language-shell"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">install</span><span class="hl-1"> </span><span class="hl-2">rocs-client</span>
+<div class="tsd-panel tsd-typography"><p align="center">
+    <a href="https://fftai.github.io" target="_blank" rel="noopener noreferrer">
+        <img width="200" src="https://raw.githubusercontent.com/FFTAI/rocs_server/main/assets/ico.jpg" alt="logo">
+    </a>
+</p>
+
+<a id="md:rocs-client-sdk-javascripttypescript" class="tsd-anchor"></a><h1><a href="#md:rocs-client-sdk-javascripttypescript">RoCS-Client SDK (Javascript/Typescript)</a></h1><a id="md:overview" class="tsd-anchor"></a><h2><a href="#md:overview">Overview</a></h2><p>This example (RoCS Client SDK) is suitable for you already have a robot device provided by Fourier!
+This example can be used to control the robot. It provides a set of simple APIs that allow you to easily interact with
+the robot.</p>
+<a id="md:installation" class="tsd-anchor"></a><h2><a href="#md:installation">Installation</a></h2><pre><code class="language-shell"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">install</span><span class="hl-1"> </span><span class="hl-2">rocs-client</span>
 </code><button>Copy</button></pre>
-<a id="md:how-to-use" class="tsd-anchor"></a><h3><a href="#md:how-to-use">How to use</a></h3><a id="md:import-sdk" class="tsd-anchor"></a><h4><a href="#md:import-sdk">import sdk</a></h4><p>First you need to import the SDK into your code</p>
-<pre><code class="language-javascript"><span class="hl-3">import</span><span class="hl-1"> {</span><span class="hl-4">Human</span><span class="hl-1">} </span><span class="hl-3">from</span><span class="hl-1"> </span><span class="hl-2">&#39;rocs-client&#39;</span><span class="hl-1">;   </span>
-</code><button>Copy</button></pre>
-<a id="md:create-a-robot-object" class="tsd-anchor"></a><h4><a href="#md:create-a-robot-object">Create a robot object</a></h4><p>Then, you need to create a robot object in order to use this SDK</p>
-<pre><code class="language-javascript"><span class="hl-3">import</span><span class="hl-1"> {</span><span class="hl-4">Human</span><span class="hl-1">} </span><span class="hl-3">from</span><span class="hl-1"> </span><span class="hl-2">&#39;rocs-client&#39;</span><span class="hl-1">;  </span><span class="hl-5">// Import Human, Car, Dog, etc</span><br/><br/><span class="hl-6">let</span><span class="hl-1"> </span><span class="hl-4">human</span><span class="hl-1"> = </span><span class="hl-6">new</span><span class="hl-1"> </span><span class="hl-0">Human</span><span class="hl-1">({</span><span class="hl-4">host:</span><span class="hl-1"> </span><span class="hl-2">&#39;192.168.9.17&#39;</span><span class="hl-1">});</span>
-</code><button>Copy</button></pre>
-<a id="md:control-the-robot" class="tsd-anchor"></a><h3><a href="#md:control-the-robot">Control the robot</a></h3><p>You can use the following methods to control the robot:</p>
+<a id="md:function-introduction" class="tsd-anchor"></a><h2><a href="#md:function-introduction">Function introduction</a></h2><p>You can use the following methods to control the robot:</p>
 <ul>
 <li>start(): Zero/Start control</li>
 <li>stop(): Emergency stop (will stop with power off)</li>
 <li>exit(): Exit robot control</li>
 <li>stand(): Stand in place</li>
 <li>walk(angle, speed): Control the robot to move, walk<ul>
-<li>angle(float): Angle controls direction, range is plus or minus 45 degrees. Left is positive, right is negative! (Floating point number with 8 digits)</li>
-<li>speed(float): Speed controls forward and backward, range is plus or minus 0.8. Forward is positive, backward is negative! (Floating point number with 8 digits)</li>
+<li>angle(float): Angle controls direction, range is plus or minus 45 degrees. Left is positive, right is negative! (
+Floating point number with 8 digits)</li>
+<li>speed(float): Speed controls forward and backward, range is plus or minus 0.8. Forward is positive, backward is
+negative! (Floating point number with 8 digits)</li>
 </ul>
 </li>
 <li>head(roll, pitch, yaw): Control GR-01 humanoid head movement<ul>
-<li>roll(float): roll (roll angle): describes the angle of rotation around the x-axis, left turn head is negative, right turn is positive, range (-17.1887-17.1887)</li>
-<li>pitch(float): pitch (pitch angle): describes the angle of rotation around the y-axis. Nodding forward is positive, nodding backward is negative, range (-17.1887-17.1887)</li>
-<li>yaw(float): yaw (yaw angle): describes the angle of rotation around the z-axis. Turning left head is negative, turning right head is positive, range (-17.1887-17.1887)</li>
-</ul>
-</li>
-<li>move_joint(*motor): Move joint (variable length parameter, can control multiple joints at the same time, delay estimate 2ms)<ul>
-<li>motor(Motor): Joint object, can get corresponding joint mapping relationship and parameter number through human.motor_limits</li>
+<li>roll(float): roll (roll angle): describes the angle of rotation around the x-axis, left turn head is negative,
+right turn is positive, range (-17.1887-17.1887)</li>
+<li>pitch(float): pitch (pitch angle): describes the angle of rotation around the y-axis. Nodding forward is positive,
+nodding backward is negative, range (-17.1887-17.1887)</li>
+<li>yaw(float): yaw (yaw angle): describes the angle of rotation around the z-axis. Turning left head is negative,
+turning right head is positive, range (-17.1887-17.1887)</li>
+<li>motor(Motor): Joint object, can get corresponding joint mapping relationship and parameter number through
+human.motor_limits</li>
 </ul>
 </li>
 <li>upper_body(arm_action, hand_action): Upper limb preset command<ul>
@@ -50,8 +53,14 @@ It provides a set of simple APIs that allow you to easily interact with the robo
 </ul>
 </li>
 </ul>
+<a id="md:usage" class="tsd-anchor"></a><h2><a href="#md:usage">Usage</a></h2><a id="md:import-sdk" class="tsd-anchor"></a><h4><a href="#md:import-sdk">import sdk</a></h4><p>First you need to import the SDK into your code</p>
+<pre><code class="language-javascript"><span class="hl-3">import</span><span class="hl-1"> {</span><span class="hl-4">Human</span><span class="hl-1">} </span><span class="hl-3">from</span><span class="hl-1"> </span><span class="hl-2">&#39;rocs-client&#39;</span><span class="hl-1">;   </span>
+</code><button>Copy</button></pre>
+<a id="md:create-a-robot-object" class="tsd-anchor"></a><h4><a href="#md:create-a-robot-object">Create a robot object</a></h4><p>Then, you need to create a robot object in order to use this SDK</p>
+<pre><code class="language-javascript"><span class="hl-3">import</span><span class="hl-1"> {</span><span class="hl-4">Human</span><span class="hl-1">} </span><span class="hl-3">from</span><span class="hl-1"> </span><span class="hl-2">&#39;rocs-client&#39;</span><span class="hl-1">;  </span><span class="hl-5">// Import Human, Car, Dog, etc</span><br/><br/><span class="hl-6">let</span><span class="hl-1"> </span><span class="hl-4">human</span><span class="hl-1"> = </span><span class="hl-6">new</span><span class="hl-1"> </span><span class="hl-0">Human</span><span class="hl-1">({</span><span class="hl-4">host:</span><span class="hl-1"> </span><span class="hl-2">&#39;192.168.9.17&#39;</span><span class="hl-1">}); </span><span class="hl-5">// Please replace host with the ip of your device</span>
+</code><button>Copy</button></pre>
 <a id="md:sample-code" class="tsd-anchor"></a><h4><a href="#md:sample-code">Sample code</a></h4><p>Here is a complete example code that demonstrates how to use this SDK to control the robot:</p>
-<pre><code class="language-javascript"><span class="hl-3">import</span><span class="hl-1"> {</span><span class="hl-4">Human</span><span class="hl-1">} </span><span class="hl-3">from</span><span class="hl-1"> </span><span class="hl-2">&#39;rocs-client&#39;</span><span class="hl-1">;  </span><br/><br/><span class="hl-6">let</span><span class="hl-1"> </span><span class="hl-4">human</span><span class="hl-1"> = </span><span class="hl-6">new</span><span class="hl-1"> </span><span class="hl-0">Human</span><span class="hl-1">({</span><span class="hl-4">host:</span><span class="hl-1"> </span><span class="hl-2">&#39;192.168.9.17&#39;</span><span class="hl-1">});      </span><span class="hl-5">// Replace host with the ip of the device you own</span><br/><br/><span class="hl-4">human</span><span class="hl-1">.</span><span class="hl-0">start</span><span class="hl-1">(); </span><span class="hl-5">// Enable remote control</span><br/><br/><span class="hl-0">setTimeout</span><span class="hl-1">(() </span><span class="hl-6">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-4">human</span><span class="hl-1">.</span><span class="hl-0">stand</span><span class="hl-1">() </span><span class="hl-5">// Stand up</span><br/><span class="hl-1">    </span><span class="hl-4">human</span><span class="hl-1">.</span><span class="hl-0">walk</span><span class="hl-1">(</span><span class="hl-7">0</span><span class="hl-1">, </span><span class="hl-7">0.1</span><span class="hl-1">) </span><span class="hl-5">// Move forward at a speed of 0.1</span><br/><span class="hl-1">  </span><br/><span class="hl-1">    </span><span class="hl-4">human</span><span class="hl-1">.</span><span class="hl-0">upper_body</span><span class="hl-1">(</span><span class="hl-4">arm</span><span class="hl-1">=</span><span class="hl-4">ArmAction</span><span class="hl-1">.</span><span class="hl-8">LEFT_ARM_WAVE</span><span class="hl-1">)       </span><span class="hl-5">// Wave left hand</span><br/><span class="hl-1">    </span><span class="hl-4">human</span><span class="hl-1">.</span><span class="hl-0">upper_body</span><span class="hl-1">(</span><span class="hl-4">arm</span><span class="hl-1">=</span><span class="hl-4">ArmAction</span><span class="hl-1">.</span><span class="hl-8">TWO_ARMS_WAVE</span><span class="hl-1">)       </span><span class="hl-5">// Wave hands</span><br/><span class="hl-1">    </span><span class="hl-4">human</span><span class="hl-1">.</span><span class="hl-0">upper_body</span><span class="hl-1">(</span><span class="hl-4">hand</span><span class="hl-1">=</span><span class="hl-4">HandAction</span><span class="hl-1">.</span><span class="hl-8">TREMBLE</span><span class="hl-1">)           </span><span class="hl-5">// Tremble fingers</span><br/><span class="hl-1">  </span><br/><span class="hl-1">    </span><span class="hl-4">human</span><span class="hl-1">.</span><span class="hl-0">move_joint</span><span class="hl-1">(</span><span class="hl-0">Motor</span><span class="hl-1">(</span><span class="hl-4">no</span><span class="hl-1">=</span><span class="hl-2">&#39;1&#39;</span><span class="hl-1">, </span><span class="hl-4">angle</span><span class="hl-1">=</span><span class="hl-7">10</span><span class="hl-1">, </span><span class="hl-4">orientation</span><span class="hl-1">=</span><span class="hl-2">&#39;left&#39;</span><span class="hl-1">),</span><br/><span class="hl-1">          </span><span class="hl-0">Motor</span><span class="hl-1">(</span><span class="hl-4">no</span><span class="hl-1">=</span><span class="hl-2">&#39;1&#39;</span><span class="hl-1">, </span><span class="hl-4">angle</span><span class="hl-1">=</span><span class="hl-7">10</span><span class="hl-1">, </span><span class="hl-4">orientation</span><span class="hl-1">=</span><span class="hl-2">&#39;right&#39;</span><span class="hl-1">)) </span><span class="hl-5">// Move motor no.1 left and right by 10 degrees each</span><br/><span class="hl-1">    </span><br/><span class="hl-1">    </span><span class="hl-5">//  Control system built-in state machine. In order to ensure the normal calibration and startup of the robot, it is recommended to execute subsequent commands 10 seconds after the start() command</span><br/><span class="hl-1">}, </span><span class="hl-7">10</span><span class="hl-1"> * </span><span class="hl-7">1000</span><span class="hl-1">)</span>
+<pre><code class="language-javascript"><span class="hl-3">import</span><span class="hl-1"> {</span><span class="hl-4">Human</span><span class="hl-1">} </span><span class="hl-3">from</span><span class="hl-1"> </span><span class="hl-2">&#39;rocs-client&#39;</span><span class="hl-1">;</span><br/><br/><span class="hl-6">let</span><span class="hl-1"> </span><span class="hl-4">human</span><span class="hl-1"> = </span><span class="hl-6">new</span><span class="hl-1"> </span><span class="hl-0">Human</span><span class="hl-1">({</span><span class="hl-4">host:</span><span class="hl-1"> </span><span class="hl-2">&#39;192.168.9.17&#39;</span><span class="hl-1">});      </span><span class="hl-5">// Replace host with the ip of the device you own</span><br/><br/><span class="hl-4">human</span><span class="hl-1">.</span><span class="hl-0">start</span><span class="hl-1">(); </span><span class="hl-5">// Enable remote control</span><br/><br/><span class="hl-0">setTimeout</span><span class="hl-1">(() </span><span class="hl-6">=&gt;</span><span class="hl-1"> {</span><br/><span class="hl-1">    </span><span class="hl-4">human</span><span class="hl-1">.</span><span class="hl-0">stand</span><span class="hl-1">() </span><span class="hl-5">// Stand up</span><br/><span class="hl-1">    </span><span class="hl-4">human</span><span class="hl-1">.</span><span class="hl-0">walk</span><span class="hl-1">(</span><span class="hl-7">0</span><span class="hl-1">, </span><span class="hl-7">0.1</span><span class="hl-1">) </span><span class="hl-5">// Move forward at a speed of 0.1</span><br/><br/><span class="hl-1">    </span><span class="hl-4">human</span><span class="hl-1">.</span><span class="hl-0">upper_body</span><span class="hl-1">(</span><span class="hl-4">arm</span><span class="hl-1"> = </span><span class="hl-4">ArmAction</span><span class="hl-1">.</span><span class="hl-8">LEFT_ARM_WAVE</span><span class="hl-1">)       </span><span class="hl-5">// Wave left hand</span><br/><span class="hl-1">    </span><span class="hl-4">human</span><span class="hl-1">.</span><span class="hl-0">upper_body</span><span class="hl-1">(</span><span class="hl-4">arm</span><span class="hl-1"> = </span><span class="hl-4">ArmAction</span><span class="hl-1">.</span><span class="hl-8">TWO_ARMS_WAVE</span><span class="hl-1">)       </span><span class="hl-5">// Wave hands</span><br/><span class="hl-1">    </span><span class="hl-4">human</span><span class="hl-1">.</span><span class="hl-0">upper_body</span><span class="hl-1">(</span><span class="hl-4">hand</span><span class="hl-1"> = </span><span class="hl-4">HandAction</span><span class="hl-1">.</span><span class="hl-8">TREMBLE</span><span class="hl-1">)           </span><span class="hl-5">// Tremble fingers</span><br/><br/><span class="hl-1">    </span><span class="hl-4">human</span><span class="hl-1">.</span><span class="hl-0">move_joint</span><span class="hl-1">(</span><span class="hl-0">Motor</span><span class="hl-1">(</span><span class="hl-4">no</span><span class="hl-1"> = </span><span class="hl-2">&#39;1&#39;</span><span class="hl-1">, </span><span class="hl-4">angle</span><span class="hl-1"> = </span><span class="hl-7">10</span><span class="hl-1">, </span><span class="hl-4">orientation</span><span class="hl-1"> = </span><span class="hl-2">&#39;left&#39;</span><span class="hl-1">),</span><br/><span class="hl-1">        </span><span class="hl-0">Motor</span><span class="hl-1">(</span><span class="hl-4">no</span><span class="hl-1"> = </span><span class="hl-2">&#39;1&#39;</span><span class="hl-1">, </span><span class="hl-4">angle</span><span class="hl-1"> = </span><span class="hl-7">10</span><span class="hl-1">, </span><span class="hl-4">orientation</span><span class="hl-1"> = </span><span class="hl-2">&#39;right&#39;</span><span class="hl-1">)) </span><span class="hl-5">// Move motor no.1 left and right by 10 degrees each</span><br/><br/><span class="hl-1">    </span><span class="hl-5">//  Control system built-in state machine. In order to ensure the normal calibration and startup of the robot, it is recommended to execute subsequent commands 10 seconds after the start() command</span><br/><span class="hl-1">}, </span><span class="hl-7">10</span><span class="hl-1"> * </span><span class="hl-7">1000</span><span class="hl-1">)</span>
 </code><button>Copy</button></pre>
 <a id="md:journey" class="tsd-anchor"></a><h2><a href="#md:journey">Journey</a></h2><table>
 <thead>
@@ -68,21 +77,21 @@ It provides a set of simple APIs that allow you to easily interact with the robo
 <td>Fourier Software Department</td>
 <td>2023.8</td>
 <td>1. Project initiation<br/>2. Confirm basic architecture</td>
-<td><a href="https://fftai.github.io/v0.1.html">0.1 Description</a></td>
+<td><a href="https://fftai.github.io/release/v0.1.html">0.1 Description</a></td>
 </tr>
 <tr>
 <td>0.2</td>
 <td>Fourier Software Department</td>
 <td>2023.9</td>
 <td>1. Control module, system module<br/>2. Specific coding</td>
-<td><a href="https://fftai.github.io/v0.2.html">0.2 Description</a></td>
+<td><a href="https://fftai.github.io/release/v0.2.html">0.2 Description</a></td>
 </tr>
 <tr>
-<td>1.*</td>
+<td>1.1</td>
 <td>Fourier Software Department</td>
 <td>2023.10</td>
 <td>1. Hand, head preset actions<br/>2. Single joint control of upper body</td>
-<td></td>
+<td><a href="https://fftai.github.io/release/v1.1.html">1.1 Description</a></td>
 </tr>
 </tbody></table>
 </div></div>
@@ -108,18 +117,15 @@ It provides a set of simple APIs that allow you to easily interact with the robo
 <li>
 <ul>
 <li><a href="#md:overview"><span>Overview</span></a></li>
-<li><a href="#md:quick-start"><span>Quick <wbr/>Start</span></a></li>
-<li>
-<ul>
 <li><a href="#md:installation"><span>Installation</span></a></li>
-<li><a href="#md:how-to-use"><span>How to use</span></a></li>
+<li><a href="#md:function-introduction"><span>Function introduction</span></a></li>
+<li><a href="#md:usage"><span>Usage</span></a></li>
 <li>
 <ul>
 <li><a href="#md:import-sdk"><span>import sdk</span></a></li>
-<li><a href="#md:create-a-robot-object"><span>Create a robot object</span></a></li></ul></li>
-<li><a href="#md:control-the-robot"><span>Control the robot</span></a></li>
 <li>
 <ul>
+<li><a href="#md:create-a-robot-object"><span>Create a robot object</span></a></li>
 <li><a href="#md:sample-code"><span>Sample code</span></a></li></ul></li></ul></li>
 <li><a href="#md:journey"><span>Journey</span></a></li></ul></li></ul></li></ul></div></details></div>
 <div class="site-menu">
