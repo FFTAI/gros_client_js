@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### 1.2.2 (2023-12-22)
+
 ### 1.2.1 (2023-11-06)
 
 ### [0.2.26](https://github.com/FFTAI/gros_client_js/compare/v0.2.25...v0.2.26) (2023-09-19)
