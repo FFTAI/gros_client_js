@@ -2,5 +2,8 @@
   "excludePrivate": true,
   "excludeProtected": true,
   "excludeReferences": true,
-  "excludeExternals": true
+  "excludeExternals": true,
+  "plugin": [
+    "typedoc-plugin-markdown"
+  ]
 }

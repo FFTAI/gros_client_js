@@ -1,18 +1,18 @@
 import axios from 'axios';
 
 /**
- * The Camera class is used for obtaining the video stream status and the video stream itself.
+ *  相机
  *
- *  
+ *  用于获取视频流状态和视频流
  */
 export class Camera {
 
     /**
-     * Video stream URL. If the camera is not in the open state (status is false), this field is undefined.
+     * 视频流地址。如果相机开启状态为false 则该字段为 undefined
      */
     public videoStreamUrl: string | undefined
     /**
-     * Video stream status (True or False).
+     * 视频流状态 True OR False
      */
     public videoStreamStatus: boolean = false;
 
@@ -22,9 +22,9 @@ export class Camera {
                 this.videoStreamStatus = response.data.data
                 if (this.videoStreamStatus) {
                     this.videoStreamUrl = `${baseurl}/control/camera`
-                    console.log('Robot video stream is ready for use')
+                    console.log('Robot 视频流状态可用...')
                 }
             })
-            .catch(err => console.error('The video stream on the robot is unavailable. Please check if the camera is securely connected and if the model is correct. Afterward, restart the device.', err));
+            .catch(err => console.error('Robot 视频流状态不可用！ 请检查后重启设备...', err));
     }
 }
