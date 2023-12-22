@@ -1,9 +1,8 @@
-import {ConnectOption, RobotBase} from "./robot_base";
+import { ConnectOption, RobotBase } from "./robot_base";
 
 /**
- * car 模式
- *
- * 对应car set_mode函数的参数
+ * Car Mode Enumeration
+ * Correspond to the parameters of the car's set_mode function.
  */
 export enum CarMod {
 
@@ -17,9 +16,8 @@ export enum CarMod {
 }
 
 /**
- * Car对象
- *
- * 在你需要连接Car的时候，你可以创建一个new Car()对象！ 这将会在后台连接到控制系统，并提供对应的控制函数和状态监听！
+ * 
+ * When you need to connect to a car robot, you can create a new Car() object. This will connect to the control system in the background and provide corresponding control functions and state monitoring.
  */
 export class Car extends RobotBase {
 
@@ -31,12 +29,12 @@ export class Car extends RobotBase {
 
 
     /**
-     * 设置小车运动模式
+     * Set the motion mode of the car robot. This function sends a POST request to the "/robot/mode" endpoint with the specified mode value.
      *
-     * 完成后小车将在对应模式下运动，包括 4轮 3轮 2轮
+     * Once completed, the car robot will move in the corresponding mode, including 4-wheel, 3-wheel, and 2-wheel modes.
      *
-     * @param {CarMod} mod 模式对象定义
-     * @return {Promise}  return
+     * @param {CarMod} mod The mode to set, as defined in the CarMode enumeration.
+     * @return {Promise} A Promise representing the completion of the mode-setting operation.
      */
     public async set_mode(mod: CarMod): Promise<any> {
         this.mod = mod
@@ -51,17 +49,17 @@ export class Car extends RobotBase {
 
 
     /**
-     * 控制Car移动 (该请求维持了长链接的方式进行发送)
+     * Control the movement of the car (this request is sent via long-lived connection).
      *
-     * @param {number} angle 角度 控制方向，取值范围为正负45度。向左为正，向右为负！(浮点数8位)
-     * @param {number} speed 速度 控制前后，取值范围为正负500。向前为正，向后为负！(浮点数8位)
+     * @param {number} angle Angle control for direction, with a range of -45 to 45 degrees. Positive for left, negative for right. Precision of 8 decimal places.
+     * @param {number} speed Speed control for forward and backward, with a range of -500 to 500. Positive for forward, negative for backward. Precision of 8 decimal places.
      */
     public move(angle: number, speed: number): void {
         angle = super.cover_param(angle, 'angle', -45, 45)
         speed = super.cover_param(speed, 'speed', -500, 500)
         super.websocket_send({
             "command": "move",
-            "data": {"angle": angle, "speed": speed}
+            "data": { "angle": angle, "speed": speed }
         })
     }
 
