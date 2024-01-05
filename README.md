@@ -1,97 +1,126 @@
-<p align="center">
-    <a href="https://fftai.github.io" target="_blank" rel="noopener noreferrer">
-        <img width="200" src="https://raw.githubusercontent.com/FFTAI/rocs_server/main/assets/ico.jpg" alt="logo">
-    </a>
-</p>
+# RoCS JavaScript/TypeScript Client SDK
 
-# RoCS-Client SDK (Javascript/Typescript)
+The SDK operates based on the concept of encapsulation, neatly organizing essential robot functions into separate classes, each equipped with specialized methods. Developers can make use of these encapsulated capabilities through provided interfaces, making it easy to create customized applications seamlessly. Whether you need to fine-tune low-level motor operations, coordinate complex high-level motion sequences, manage audio/video transmission, implement SLAM for mapping, or monitor odometry, the SDK's modular structure ensures flexibility and simplicity for developers to customize your solutions.
 
-## Overview
+## Prerequisite
 
-This example (RoCS Client SDK) is suitable for you already have a robot device provided by Fourier!
-This example can be used to control the robot. It provides a set of simple APIs that allow you to easily interact with
-the robot.
+Prior to the setup, install Node.js and npm:
 
-## Installation
+* Download and install Node.js from [nodejs.org](https://nodejs.org/).
+* npm (Node Package Manager) comes bundled with Node.js.
+* Verify installation by running `node -v` and `npm -v` in your terminal.
+
+## Installing JavaScript/TypeScript SDK
+
+The RoCS JavaScript/TypeScript Client packages can be easily installed or upgraded with the following command.
 
 ```shell
 npm install rocs-client
 ```
 
-## Function introduction
+## Verifying the Installation
 
-You can use the following methods to control the robot:
+Run the following command to verify the installation:
 
-- start(): Zero/Start control
-- stop(): Emergency stop (will stop with power off)
-- exit(): Exit robot control
-- stand(): Stand in place
-- walk(angle, speed): Control the robot to move, walk
-    - angle(float): Angle controls direction, range is plus or minus 45 degrees. Left is positive, right is negative! (
-      Floating point number with 8 digits)
-    - speed(float): Speed controls forward and backward, range is plus or minus 0.8. Forward is positive, backward is
-      negative! (Floating point number with 8 digits)
-- head(roll, pitch, yaw): Control GR-01 humanoid head movement
-    - roll(float): roll (roll angle): describes the angle of rotation around the x-axis, left turn head is negative,
-      right turn is positive, range (-17.1887-17.1887)
-    - pitch(float): pitch (pitch angle): describes the angle of rotation around the y-axis. Nodding forward is positive,
-      nodding backward is negative, range (-17.1887-17.1887)
-    - yaw(float): yaw (yaw angle): describes the angle of rotation around the z-axis. Turning left head is negative,
-      turning right head is positive, range (-17.1887-17.1887)
-    - motor(Motor): Joint object, can get corresponding joint mapping relationship and parameter number through
-      human.motor_limits
-- upper_body(arm_action, hand_action): Upper limb preset command
-    - arm_action(ArmAction): Arm preset command enumeration
-    - hand_action(HandAction): Hand preset command enumeration
-
-
-## Usage
-
-#### import sdk
-First you need to import the SDK into your code
-
-```javascript
-import {Human} from 'rocs-client';   
+```shell
+npm list rocs-client
 ```
 
-#### Create a robot object
+**T**he following output signifies a successful installation.
 
-Then, you need to create a robot object in order to use this SDK
+```shell
+C:\Users\Fourier>npm list rocs-client
+Fourier@ C:\Users\Fourier
+`-- rocs-client@1.1.0
+```
+
+## Using JavaScript/TypeScript SDK
+
+1. Import the SDK to your JavaScript/TypeScript code.
+
+```javascript
+import {Human} from 'rocs-client';   // import human class of RoCS client module
+```
+
+3. Create a robot object.
+
 ```javascript
 import {Human} from 'rocs-client';  // Import Human, Car, Dog, etc
 
 let human = new Human({host: '192.168.9.17'}); // Please replace host with the ip of your device
+
 ```
 
-#### Sample code
-Here is a complete example code that demonstrates how to use this SDK to control the robot:
+4. Control the robot.
 
-```javascript
-import {Human} from 'rocs-client';
+   You can use the following methods of the `human` class to control the robot:
 
-let human = new Human({host: '192.168.9.17'});      // Replace host with the ip of the device you own
+   * `start()`: initiates or resets control.
+   * `stop()`: triggers an emergency stop (halts with power off).
+   * `exit()`: ends robot control session.
+   * `stand()`: commands the robot to stand in place.
+   * `walk(angle, speed)`: guides the robot in movement.
 
-human.start(); // Enable remote control
+     * `angle(float)`: controls direction with a range of plus or minus 45 degrees. Positive for left, negative for right. The value is an 8-digit floating-point number.
+     * `speed(float)`: manages forward and backward movement with a range of plus or minus 0.8. Positive for forward, negative for backward. The value is an 8-digit floating-point number.
+   * `head(roll, pitch, yaw)`: directs the GR robot's head movements.
 
+     * `roll(float)`: controls the roll angle (rotation around the x-axis). Negative for left, positive for right, within the range of (-17.1887-17.1887).
+     * `pitch(float)`: adjusts the pitch angle (rotation around the y-axis). Positive for nodding forward, negative for nodding backward, within the range of (-17.1887-17.1887).
+     * `yaw(float)`: manages the yaw angle (rotation around the z-axis). Negative for turning left, positive for turning right, within the range of (-17.1887-17.1887).
+   * `move_joint(*motor)`: moves joints (variable length parameter, capable of controlling multiple joints simultaneously, estimated delay 2ms).
+
+     * `motor(Motor)`: joint object, provides joint mapping relationships and parameter numbers through `human.motor_limits`.
+   * `upper_body(arm_action, hand_action)`: executes preset commands for the upper limbs.
+
+     * `arm_action(ArmAction)`: enumeration for arm preset commands.
+     * `hand_action(HandAction)`: enumeration for hand preset commands.
+
+## Example code
+
+Here's an example code snippet showcasing the utilization of the JavaScript/TypeScript Client SDK for robot control:
+
+```Javascript/TypeScript
+// Import Human class from the 'rocs-client' library
+import {Human} from'rocs-client';  
+
+// Create an instance of the Human class with the specified robot IP
+let human = newHuman({host:'192.168.9.17'});      // Replace '192.168.9.17' with your robot's actual IP
+
+// Enable remote control for the robot
+human.start(); 
+
+// After a brief delay, execute a sequence of actions
 setTimeout(() => {
-    human.stand() // Stand up
-    human.walk(0, 0.1) // Move forward at a speed of 0.1
+    // Make the robot stand up
+    human.stand() 
+    // Move the robot forward at a speed of 0.1
+    human.walk(0, 0.1) 
+    // Wave left hand
+    human.upper_body(arm=ArmAction.LEFT_ARM_WAVE)   
+    // Wave both hands
+    human.upper_body(arm=ArmAction.TWO_ARMS_WAVE)   
+    // Tremble the fingers
+    human.upper_body(hand=HandAction.TREMBLE)   
+  
+    //Move motor no.1 left and right by 10 degrees each
+    human.move_joint(Motor(no='1', angle=10, orientation='left'),
 
-    human.upper_body(arm = ArmAction.LEFT_ARM_WAVE)       // Wave left hand
-    human.upper_body(arm = ArmAction.TWO_ARMS_WAVE)       // Wave hands
-    human.upper_body(hand = HandAction.TREMBLE)           // Tremble fingers
+          Motor(no='1', angle=10, orientation='right')) 
 
-    human.move_joint(Motor(no = '1', angle = 10, orientation = 'left'),
-        Motor(no = '1', angle = 10, orientation = 'right')) // Move motor no.1 left and right by 10 degrees each
+  
 
-    //  Control system built-in state machine. In order to ensure the normal calibration and startup of the robot, it is recommended to execute subsequent commands 10 seconds after the start() command
-}, 10 * 1000)
+    //  Control system built-in state machine to ensure the normal robot calibration and startup. It is recommended to execute subsequent commands 10 seconds after the start() command.
+
+}, 10*1000)
+
 ```
 
-## Journey
 
-| Version | Author                      | Date    | Description                                                        | Quick Preview                                                |
-|---------|-----------------------------|---------|--------------------------------------------------------------------|--------------------------------------------------------------|
-| 0.1     | Fourier Software Department | 2023.8  | 1. Project initiation<br/>2. Confirm basic architecture            | [0.1 Description](https://fftai.github.io/release/v0.1.html) |
-| 0.2     | Fourier Software Department | 2023.9  | 1. Control module, system module<br/>2. Specific coding            | [0.2 Description](https://fftai.github.io/release/v0.2.html) |
-| 1.1     | Fourier Software Department | 2023.10 | 1. Hand, head preset actions<br/>2. Single joint control of upper body | [1.1 Description](https://fftai.github.io/release/v1.1.html) |
+## Release History
+
+| Version | Released by                 | Date    | Description                                                             |
+| ------- | --------------------------- | ------- | ----------------------------------------------------------------------- |
+| 0.1     | Fourier Software Department | 2023.8  | 1. Project initiation<br />2. Confirm basic architecture                |
+| 0.2     | Fourier Software Department | 2023.9  | 1. Control module, system module<br />2. Specific coding                |
+| 1.1     | Fourier Software Department | 2023.10 | 1. Hand, head preset actions<br />2. Single joint control of upper body |
