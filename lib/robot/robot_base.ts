@@ -44,7 +44,6 @@ export class RobotBase extends EventEmitter {
     private readonly baseUrl: string = '';
     private readonly wsUrl: string = '';
     private readonly ws!: WebSocket;
-    private retry_count: number = 0
 
     /**
      * Constructor for the base class of the robot.
@@ -178,18 +177,10 @@ export class RobotBase extends EventEmitter {
     protected websocket_send(message: any) {
         if (this.ws && this.ws.readyState === 1) {
             this.ws.send(JSON.stringify(message))
-            this.retry_count = 0
             return
         }
-        if (this.retry_count == 5) {
-            throw new Error("Failed to send WebSocket message: Maximum retry limit reached.")
-        }
-        this.retry_count += 1
-
-        console.warn("WebSocket not ready: Retrying (attempt %s)", this.retry_count)
-        setTimeout(() => {
-            this.websocket_send(message)
-        }, 1000)
+        console.warn('WebSocket not ready!')
+        this.emit('error', 'WebSocket not ready!');
     }
 
     /**
