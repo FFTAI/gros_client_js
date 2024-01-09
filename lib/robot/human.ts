@@ -47,7 +47,7 @@ export enum BodyAction {
 }
 
 /**
- * The Human class implements the behavior of the GR-1 robot. It establishes a connection
+ * The Human class implements the behavior of the GR robot. It establishes a connection
     to the robot and offers control functions along with status monitoring.
  */
 export class Human extends RobotBase {
@@ -217,8 +217,8 @@ export class Human extends RobotBase {
 
     /**
      * This function is used to move joints to specified positions, considering motor limits.
-     * It facilitates the movement of multiple joints of the robot. It takes an array of motors with target angles and ensures that each joint's movement adheres to predefined motor limits. If motor limits are not available initially, the function retries after a delay until the limits are obtained.
-     * Please be noted that it is crucial to provide valid motor objects with 'no', 'orientation', and 'angle' properties. Additionally, having accurate motor limits ensures safe and controlled joint movements.
+     * It facilitates the movement of multiple joints of the robot. It takes an array of motors with target angles and ensures that each joint's movement adheres to predefined motor limits. 
+     * 
      * @param {Array<Motor>} args - An array of motors specifying the joints to be moved. Each motor object in the array should have properties: 'no' (joint number), 'orientation' (joint orientation), and 'angle' (target angle).
      * @return {Promise}  A promise that resolves once the joint movement command has been executed. 
      * 

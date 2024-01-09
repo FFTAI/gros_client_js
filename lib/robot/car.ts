@@ -17,7 +17,8 @@ export enum CarMod {
 
 /**
  * 
- * When you need to connect to a car robot, you can create a new Car() object. This will connect to the control system in the background and provide corresponding control functions and state monitoring.
+ * The `Car` class implements the behavior of car robots and facilitates communication with its control system. It provides
+    control functions and real-time status monitoring.
  */
 export class Car extends RobotBase {
 
