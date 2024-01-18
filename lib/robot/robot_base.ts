@@ -194,7 +194,7 @@ export class RobotBase extends EventEmitter {
      */
     protected async http_request<T>(config: AxiosRequestConfig): Promise<T> {
         return axios.request({
-            timeout: 5000,
+            timeout: 10000,
             baseURL: this.baseUrl,
             ...config
         })

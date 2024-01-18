@@ -83,7 +83,7 @@ export class Human extends RobotBase {
     public async get_joint_limit(): Promise<any> {
         return super.http_request({
             method: "GET",
-            url: "/robot/join_limit",
+            url: "/robot/joint_limit",
         })
     }
 
