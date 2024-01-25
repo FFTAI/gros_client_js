@@ -1,10 +1,5 @@
-// Import necessary modules from "./robot_base" 
-import { ConnectOption, RobotBase } from "./robot_base";
-
-// Define the Motor class
-export class Motor {
-    constructor(public no: string, public orientation: string, public angle: number) { }
-}
+// Import necessary modules from "./robot_base"
+import {ConnectOption, RobotBase} from "./robot_base";
 
 // Define the ArmAction enumeration
 export enum ArmAction {
@@ -48,18 +43,13 @@ export enum BodyAction {
 
 /**
  * The Human class implements the behavior of the GR robot. It establishes a connection
-    to the robot and offers control functions along with status monitoring.
+ to the robot and offers control functions along with status monitoring.
  */
 export class Human extends RobotBase {
-
-    private motor_limits: Array<any> = []
 
     // Constructor with an optional parameter for connection options
     constructor(option?: ConnectOption) {
         super(option);
-        this.get_motor_limit_list().then(res => {
-            this.motor_limits = res.data.data
-        }).catch(error => { console.log(error) })
     }
 
     /**
@@ -76,7 +66,7 @@ export class Human extends RobotBase {
     }
 
     /**
-     * Retrieve the joint limits of the robot, including the permissible range of motion for each joint. Understanding these limits is crucial for ensuring the robot's movements stay within safe and operational parameters, preventing potential damage or errors. 
+     * Retrieve the joint limits of the robot, including the permissible range of motion for each joint. Understanding these limits is crucial for ensuring the robot's movements stay within safe and operational parameters, preventing potential damage or errors.
      *
      * @return {Promise}  A promise that, when resolved, provides information about the joint limits of the robot.
      */
@@ -117,7 +107,7 @@ export class Human extends RobotBase {
     }
 
     /**
-     * This function disables the debug state mode, stopping the periodic state updates from the robot. 
+     * This function disables the debug state mode, stopping the periodic state updates from the robot.
      * @return {Promise}  Return a promise
      */
     public async disable_debug_state(): Promise<any> {
@@ -157,7 +147,7 @@ export class Human extends RobotBase {
     }
 
     /**
-     *Control the movement of the robot's body. This request is sent via a long-lived connection. 
+     *Control the movement of the robot's body. This request is sent via a long-lived connection.
      *
      * @param {number} squat controls the up-and-down movement, ranging from -0.15 to 0. Negative values for downward motion, 0 for neutral position.
      * @param {number} rotate_waist controls left-and-right rotation, with a range of -14.32 to 14.32. Positive values for left rotation, negative for right rotation. Precision of 8 decimal places.
@@ -173,7 +163,7 @@ export class Human extends RobotBase {
 
     /**
      * This functions is used to control the upper body movements of the robot.
-     * 
+     *
      * @param {string} arm_action ZERO_RESET for resetting, LEFT_ARM_WAVE for waving with the left arm, TWO_ARMS_WAVE for waving with both arms, ARMS_SWING for swinging arms, HELLO for waving hello.
      * @param {string} hand_action HALF_HANDSHAKE for a half handshake, THUMBS_UP for a thumbs-up, OPEN for an open hand, SLIGHTLY_BENT for a slightly bent hand, GRASP for grasping, TREMBLE for trembling, HANDSHAKE for a handshake.
      */
@@ -190,7 +180,7 @@ export class Human extends RobotBase {
 
     /**
      * This function is used to control the lower body movements of the robot.
-     * 
+     *
      * @param {string} lower_body_mode SQUAT for squatting, ROTATE_WAIST for rotating the waist.
      */
     public async lower_body(lower_body_mode?: BodyAction): Promise<any> {
@@ -204,71 +194,9 @@ export class Human extends RobotBase {
     }
 
     /**
-     * This function is used to retrieve the motor limits.
-     * 
-     * @return {Promise}  returns a promise that, when resolved, provides information about the motor limits.
-     */
-    public async get_motor_limit_list(): Promise<any> {
-        return super.http_request({
-            method: "GET",
-            url: "/robot/motor/limit/list"
-        })
-    }
-
-    /**
-     * This function is used to move joints to specified positions, considering motor limits.
-     * It facilitates the movement of multiple joints of the robot. It takes an array of motors with target angles and ensures that each joint's movement adheres to predefined motor limits. 
-     * 
-     * @param {Array<Motor>} args - An array of motors specifying the joints to be moved. Each motor object in the array should have properties: 'no' (joint number), 'orientation' (joint orientation), and 'angle' (target angle).
-     * @return {Promise}  A promise that resolves once the joint movement command has been executed. 
-     * 
-     */
-    public async move_joint(args: Array<Motor>): Promise<void> {
-        var motors: any = []
-        var target_list: any = []
-
-        // Step 1: Construct a list of motors with specified target angles.
-        args.forEach(motor => {
-            motors.push({ no: motor.no, orientation: motor.orientation, angle: motor.angle })
-        });
-        console.log('motor_limits', this.motor_limits)
-
-        // Step 2: Check for the availability of motor limits. If not available, retry after a delay.
-        if (this.motor_limits.length == 0) {
-            setTimeout(() => {
-                this.move_joint(args)
-            }, 500);
-            return
-        }
-
-        // Step 3: Compare each specified motor with its corresponding motor limit.
-        motors.forEach((item1: { no: any; orientation: any; }) => {
-            this.motor_limits.forEach((item2: { no: any; orientation: any; }) => {
-                if (item1.no == item2.no && item1.orientation == item2.orientation)
-                    target_list.push({ ...item1, ...item2 })
-            });
-        });
-
-        // Step 4: Adjust the target angles based on the motor limits.
-        if (target_list.length > 0) {
-            target_list.forEach((motor: { [x: string]: any; }) => {
-                motor['angle'] = super.cover_param(motor['angle'], 'angle', motor['min_angle'], motor['max_angle']);
-                delete motor['min_angle'];
-                delete motor['max_angle'];
-                delete motor['ip'];
-            });
-
-            // Step 5: Send the adjusted command to move the joints using a WebSocket connection.
-            console.log('target_list', target_list)
-            super.websocket_send({ 'command': 'move_joint', 'data': { "command": target_list } })
-        }
-    }
-
-    /**
      * This function is used to start the control program. It initiates the control program for the robot by sending a request to the specified endpoint ("/robot/sdk_ctrl/start") through an HTTP GET request. The control program is responsible for managing and coordinating various aspects of the robot's behavior and functionality.
      * @return {Promise<any>} returns a promise that resolves once the control program has been started.
      * Make ensure that the robot's SDK control server is properly configured and running before invoking this function. Additionally, handle the promise resolution appropriately to account for the success or failure of the control program startup.
-
      */
     public async control_svr_start(): Promise<any> {
         return super.http_request({
@@ -279,9 +207,8 @@ export class Human extends RobotBase {
 
     /**
      * This function is used to close the control program. It sends an HTTP GET request to the specified endpoint ("/robot/sdk_ctrl/close") to close the control program for the robot. Closing the control program stops the active management and coordination of the robot's behavior and functionality.
-  
      * @return {Promise<any>} returns a promise that resolves once the control program has been closed.
-     * 
+     *
      * Please be noted that before invoking this function, ensure that the control program is in a state where it can be safely closed. Handle the promise resolution appropriately to account for the success or failure of the control program closure.
      */
     public async control_svr_close(): Promise<any> {
@@ -291,7 +218,7 @@ export class Human extends RobotBase {
         })
     }
     /**
-     * This function is used to check the status of the control program. 
+     * This function is used to check the status of the control program.
      * @return {Promise} returns the promise with information detailing the status, allowing you to monitor and respond to the state of the control program.
      * This function is valuable for real-time monitoring and decision-making based on the operational status of the control program.
      */
