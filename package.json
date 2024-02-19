@@ -1,6 +1,6 @@
 {
   "name": "rocs-client",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "RoCS-Client SDK (Javascript/Typescript) For Fourier",
   "main": "index.js",
   "scripts": {
