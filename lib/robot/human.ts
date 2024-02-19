@@ -12,7 +12,25 @@ export enum ArmAction {
     // Swing arms
     ARMS_SWING = "ARMS_SWING",
     // Wave hello
-    HELLO = "HELLO"
+    HELLO = "HELLO",
+    //Wave the arms left and right
+    WAVING_LEFT_RIGHT = "WAVING_LEFT_RIGHT",
+    //Perform a high-five gesture
+    HIGH_FIVE = "HIGH_FIVE",
+    //Perform a dabbing gesture
+    DABBING = "DABBING",
+    //Perform a bow gesture
+    BOW = "BOW",
+    //Perform a manual long horn gesture
+    MANUAL_LONG_HORN = "MANUAL_LONG_HORN",
+    //Perform a manual OK gesture
+    MANUAL_OK = "MANUAL_OK",
+    //Perform a manual thumbs-up gesture
+    MANUAL_THUMB_UP_0 = "MANUAL_THUMB_UP_0",
+    //Perform another manual thumbs-up gesture
+    MANUAL_THUMB_UP_1 = "MANUAL_THUMB_UP_1",
+    //Perform the NVIDIA Dance routine
+    NVIDIA_DANCE = "NVIDIA_DANCE"
 }
 
 // Define the HandAction enumeration
