@@ -1,5 +1,6 @@
 import {ArmAction, BodyAction, HandAction, Human} from "./lib/robot/human";
 import {Motor, MotorScheme} from "./lib/motor/motor";
+import {EndEffector, EndEffectorScheme} from './lib/end_effector/end_effector'
 import {Car, CarMod} from "./lib/robot/car";
 import axios from "axios";
 import {ConnectOption, RobotBase} from "./lib/robot/robot_base";
@@ -34,7 +35,9 @@ module.exports = {
     HandAction,
     BodyAction,
     Motor,
-    MotorScheme
+    MotorScheme,
+    EndEffector,
+    EndEffectorScheme
 }
 // Exporting elements using ES6 syntax
 export {
@@ -49,6 +52,8 @@ export {
     HandAction,
     BodyAction,
     Motor,
-    MotorScheme
+    MotorScheme,
+    EndEffector,
+    EndEffectorScheme
 };
 
